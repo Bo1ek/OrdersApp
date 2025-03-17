@@ -36,5 +36,15 @@ public class CreateOrderValidator : AbstractValidator<Order>
             .GreaterThan(0)
             .WithMessage("Price must be greater than zero.");
 
+        RuleFor(o => o.adress)
+            .NotNull()
+            .WithMessage("Adress cannot be null.")
+            .NotEmpty()
+            .WithMessage("Adress cannot be empty.")
+            .MinimumLength(3)
+            .WithMessage("Adress must be at least 3 characters long.")
+            .MaximumLength(100)
+            .WithMessage("Adress cannot be longer than 100 characters.");
+
     }
 }
