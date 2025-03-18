@@ -4,10 +4,12 @@ namespace OrdersApp.Application.Repositories;
 public interface IOrderRepository
 {
     Task CreateOrderAsync();
-    Order GetOrderById(int orderId);
-    List<Order> GetOrders();
-    Task UpdateOrder(int orderId);
-    Task DeleteOrder(int orderId);
-    bool Exists(int orderId);
+    Task<Order> GetOrderByIdAsync(int orderId);
+    Task<List<Order>> GetOrdersAsync();
+    Task UpdateOrderAsync(int orderId);
+    Task DeleteOrderAsync(int orderId);
+    Task<bool> ExistsAsync(int orderId);
+    Task SendOrderToTheWarehouseAsync(int orderId);
+    Task ShipOrderAsync(int orderId);
 
 }

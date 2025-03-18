@@ -1,4 +1,5 @@
-﻿using OrdersApp.Application.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using OrdersApp.Application.Data;
 using OrdersApp.Application.Enums;
 using OrdersApp.Application.Exceptions;
 using OrdersApp.Application.Helpers;
@@ -9,7 +10,6 @@ namespace OrdersApp.Application.Repositories;
 public class OrderRepository : IOrderRepository
 {
     private readonly ApplicationDbContext _context;
-
     public OrderRepository(ApplicationDbContext context)
     {
         _context = context;
@@ -22,26 +22,27 @@ public class OrderRepository : IOrderRepository
         await _context.SaveChangesAsync();
     }
 
-    public Order GetOrderById(int orderId)
+    public async Task<Order> GetOrderByIdAsync(int orderId)
     {
-        return _context.Orders.FirstOrDefault(o => o.orderId == orderId) ?? throw new OrderNotFoundException(orderId);
-    }
-
-    public List<Order> GetOrders()
-    {
-        return  _context.Orders.ToList();
-    }
-
-    public async Task UpdateOrder(int orderId)
-    {
-        var order = await _context.Orders.FindAsync(orderId);
-        if (!Exists(orderId))
+        if (!await ExistsAsync(orderId)) 
             throw new OrderNotFoundException(orderId);
+        return await _context.Orders.FirstOrDefaultAsync(o => o.orderId == orderId) ?? throw new InvalidOperationException();
+    }
 
+    public async Task<List<Order>> GetOrdersAsync()
+    {
+        return await _context.Orders.ToListAsync();
+    }
+
+    public async Task UpdateOrderAsync(int orderId)
+    {
+        if (!await ExistsAsync(orderId))
+            throw new OrderNotFoundException(orderId);
+        
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteOrder(int orderId)
+    public async Task DeleteOrderAsync(int orderId)
     {
         var orderToRemove = await _context.Orders.FindAsync(orderId);
         if (orderToRemove == null)
@@ -50,8 +51,35 @@ public class OrderRepository : IOrderRepository
         await _context.SaveChangesAsync();
     }
 
-    public bool Exists(int orderId)
+    public async Task<bool> ExistsAsync(int orderId)
     {
-        return _context.Orders.Any(o => o.orderId == orderId);
+        return await _context.Orders.AnyAsync(o => o.orderId == orderId);
+    }
+
+    public async Task SendOrderToTheWarehouseAsync(int orderId)
+    {
+        var orderToTransfer = await _context.Orders.FindAsync(orderId);
+        if (orderToTransfer == null)
+            throw new OrderNotFoundException(orderId);
+        if (orderToTransfer.price <= 2500 && orderToTransfer.paymentMethod == PaymentMethods.Cash)
+        {
+            orderToTransfer.orderStatus = OrderStatuses.ReturnedToClient;
+            Console.WriteLine("Order status cannot be sent to the warehouse due to its low price and payment method. " +
+                              "Please insert price higher than 2500 or change payment method to card.");
+        }
+        orderToTransfer.orderStatus = OrderStatuses.InWarehouse;
+    }
+    public async Task ShipOrderAsync (int orderId)
+    {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        var orderToTransfer = await _context.Orders.FindAsync(orderId);
+        if (orderToTransfer == null)
+            throw new OrderNotFoundException(orderId);
+        orderToTransfer.orderStatus = OrderStatuses.Shipped;
+        watch.Stop();
+        if (watch.ElapsedMilliseconds >= 5000)
+            throw new ShipOrderMethodLongerThan5Seconds(orderId);
+        await _context.SaveChangesAsync();
+
     }
 }

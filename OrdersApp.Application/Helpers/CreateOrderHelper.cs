@@ -18,12 +18,12 @@ public static class CreateOrderHelper
         var clientType = (ClientTypes)Convert.ToInt32(Console.ReadLine());
 
         Console.WriteLine("Please select order status: ");
-        Console.WriteLine($"Order statutes: \n 1. {OrderStatuses.New} \n 2. {OrderStatuses.InWarehouse}" + 
+        Console.WriteLine($"Order statutes: \n 1.{OrderStatuses.New} \n 2.{OrderStatuses.InWarehouse}" + 
                           $"\n 3.{OrderStatuses.Shipped} \n 4.{OrderStatuses.ReturnedToClient} " + 
                           $"\n 5.{OrderStatuses.Error} \n 6.{OrderStatuses.Closed}");
         var orderStatus = (OrderStatuses)Convert.ToInt32(Console.ReadLine());
         
-        Console.WriteLine("Please select client type: ");
+        Console.WriteLine("Please select payment method: ");
         Console.WriteLine($"Client types: \n 1. {PaymentMethods.Cash} \n 2. {PaymentMethods.Card} ");
         var paymentMethod = (PaymentMethods)Convert.ToInt32(Console.ReadLine());
 
