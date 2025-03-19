@@ -61,6 +61,8 @@ public class OrderRepository : IOrderRepository
         var orderToTransfer = await _context.Orders.FindAsync(orderId);
         if (orderToTransfer == null)
             throw new OrderNotFoundException(orderId);
+        if (orderToTransfer.orderStatus == OrderStatuses.InWarehouse)
+            Console.WriteLine("Order status is already in the warehouse.");
         if (orderToTransfer.price <= 2500 && orderToTransfer.paymentMethod == PaymentMethods.Cash)
         {
             orderToTransfer.orderStatus = OrderStatuses.ReturnedToClient;
@@ -75,6 +77,8 @@ public class OrderRepository : IOrderRepository
         var orderToTransfer = await _context.Orders.FindAsync(orderId);
         if (orderToTransfer == null)
             throw new OrderNotFoundException(orderId);
+        if (orderToTransfer.orderStatus == OrderStatuses.Shipped)
+            Console.WriteLine("Order is already shipped.");
         orderToTransfer.orderStatus = OrderStatuses.Shipped;
         watch.Stop();
         if (watch.ElapsedMilliseconds >= 5000)
