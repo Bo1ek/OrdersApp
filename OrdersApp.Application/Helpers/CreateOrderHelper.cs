@@ -31,12 +31,12 @@ public static class CreateOrderHelper
         var adress = Console.ReadLine();
         var order = new Order()
         {
-            price = price,
-            productName = productName,
-            clientType = clientType,
-            orderStatus = orderStatus,
-            paymentMethod = paymentMethod,
-            adress = adress,
+            Price = price,
+            ProductName = productName,
+            ClientType = clientType,
+            OrderStatus = orderStatus,
+            PaymentMethod = paymentMethod,
+            Address = adress,
         };
         
         var validator = new CreateOrderValidator();

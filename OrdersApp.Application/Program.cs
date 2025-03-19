@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OrdersApp.Application.Data;
 using OrdersApp.Application.DependencyInjection;
+using OrdersApp.Application.Helpers;
 using OrdersApp.Application.Repositories;
 using OrdersApp.Application.Services;
 
@@ -34,7 +35,8 @@ while (true)
     switch (choice)
     {
         case "1":
-            await orderRepository.CreateOrderAsync();
+            var entity = CreateOrderHelper.CreateOrder();
+            await orderRepository.CreateOrderAsync(entity);
             break;
         case "2":
             await orderService.SendOrderToTheWarehouseAsync();

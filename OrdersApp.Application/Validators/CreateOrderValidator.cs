@@ -7,28 +7,28 @@ public class CreateOrderValidator : AbstractValidator<Order>
 {
     public CreateOrderValidator()
     {
-        RuleFor(o => o.clientType)
+        RuleFor(o => o.ClientType)
             .NotNull()
             .WithMessage("Client type cannot be null.")
             .NotEmpty()
             .WithMessage("Client type cannot be empty.")
             .IsInEnum();
         
-        RuleFor(o => o.orderStatus)
+        RuleFor(o => o.OrderStatus)
             .NotNull()
             .WithMessage("Order status cannot be null.")
             .NotEmpty()
             .WithMessage("Order status cannot be empty.")
             .IsInEnum();
         
-        RuleFor(o => o.paymentMethod)
+        RuleFor(o => o.PaymentMethod)
             .NotNull()
             .WithMessage("Payment method cannot be null.")
             .NotEmpty()
             .WithMessage("Payment method cannot be empty.")
             .IsInEnum();
 
-        RuleFor(o => o.price)
+        RuleFor(o => o.Price)
             .NotNull()
             .WithMessage("Price cannot be null.")
             .NotEmpty()
@@ -36,7 +36,7 @@ public class CreateOrderValidator : AbstractValidator<Order>
             .GreaterThan(0)
             .WithMessage("Price must be greater than zero.");
 
-        RuleFor(o => o.adress)
+        RuleFor(o => o.Address)
             .NotNull()
             .WithMessage("Adress cannot be null.")
             .NotEmpty()

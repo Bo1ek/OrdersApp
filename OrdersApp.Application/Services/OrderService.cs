@@ -22,8 +22,8 @@ public class OrderService : IOrderService
         {
             var order =  await _orderRepository.GetOrderByIdAsync(orderId);
             Console.WriteLine(
-            $"OrderId : {order.orderId} | Price: {order.price} | Product name: {order.productName} |" +
-            $" Client type: {order.clientType}  | Address: {order.adress} | Status: {order.orderStatus} | Payment Method: {order.paymentMethod}");
+            $"OrderId : {order.OrderId} | Price: {order.Price} | Product name: {order.ProductName} |" +
+            $" Client type: {order.ClientType}  | Address: {order.Address} | Status: {order.OrderStatus} | Payment Method: {order.PaymentMethod}");
         }
         catch (OrderNotFoundException)
         {
@@ -43,12 +43,12 @@ public class OrderService : IOrderService
         var orderId = int.Parse(Console.ReadLine());
         var order =  await _orderRepository.GetOrderByIdAsync(orderId);
         Console.WriteLine("Enter which property do u want to update?");
-        Console.WriteLine($"1.Price -- Current price - {order.price}");
-        Console.WriteLine($"2.Product name -- Current product name -- {order.productName} ");
-        Console.WriteLine($"3.Client type -- Current client type - {order.clientType}");
-        Console.WriteLine($"4.Order status -- Current order status - {order.orderStatus}");
-        Console.WriteLine($"5.Payment method -- Current payment method - {order.paymentMethod}");
-        Console.WriteLine($"6.Address -- Current address - {order.adress}");
+        Console.WriteLine($"1.Price -- Current price - {order.Price}");
+        Console.WriteLine($"2.Product name -- Current product name -- {order.ProductName} ");
+        Console.WriteLine($"3.Client type -- Current client type - {order.ClientType}");
+        Console.WriteLine($"4.Order status -- Current order status - {order.OrderStatus}");
+        Console.WriteLine($"5.Payment method -- Current payment method - {order.PaymentMethod}");
+        Console.WriteLine($"6.Address -- Current address - {order.Address}");
         
         var choice = Console.ReadLine();
         try
@@ -58,18 +58,18 @@ public class OrderService : IOrderService
                 case "1" :
                     Console.WriteLine("Enter new price: ");
                     var newPrice = decimal.Parse(Console.ReadLine());
-                    order.price = newPrice;
+                    order.Price = newPrice;
                     break;
                 case "2" :
                     Console.WriteLine("Enter new product name: ");
                     var newProductName = Console.ReadLine();
-                    order.productName = newProductName;
+                    order.ProductName = newProductName;
                     break;
                 case "3" :
                     Console.WriteLine("Enter new client type: ");
                     Enum.TryParse(Console.ReadLine(), out ClientTypes newClientType);
                     if (Enum.IsDefined(typeof(ClientTypes), newClientType)) 
-                        order.clientType = newClientType;
+                        order.ClientType = newClientType;
                     else
                         Console.WriteLine("Invalid client type. Pass proper client type.");
                     break;
@@ -77,7 +77,7 @@ public class OrderService : IOrderService
                     Console.WriteLine("Enter new order status: ");
                     Enum.TryParse(Console.ReadLine(), out OrderStatuses newOrderStatus);
                     if (Enum.IsDefined(typeof(OrderStatuses), newOrderStatus))
-                        order.orderStatus = newOrderStatus;
+                        order.OrderStatus = newOrderStatus;
                     else
                         Console.WriteLine("Invalid order status. Pass proper order status.");
                     break;
@@ -85,14 +85,14 @@ public class OrderService : IOrderService
                     Console.WriteLine("Enter new payment method: ");
                     Enum.TryParse(Console.ReadLine(), out PaymentMethods newPaymentMethod);
                     if (Enum.IsDefined(typeof(PaymentMethods), newPaymentMethod))
-                        order.paymentMethod = newPaymentMethod;
+                        order.PaymentMethod = newPaymentMethod;
                     else 
                         Console.WriteLine("Invalid payment method. Pass proper payment method.");
                     break;
                 case "6":
                     Console.WriteLine("Enter new address: ");
                     var newAddress = Console.ReadLine();
-                    order.adress = newAddress;
+                    order.Address = newAddress;
                     break;
                 default: 
                     Console.WriteLine("Invalid choice.");
@@ -158,7 +158,7 @@ public class OrderService : IOrderService
         var orders = await _orderRepository.GetOrdersAsync();
         foreach (var order in orders)
             Console.WriteLine(
-                $"OrderId : {order.orderId} | Price: {order.price} | Product name: {order.productName} |" +
-                $" Client type: {order.clientType}  | Address: {order.adress} | Status: {order.orderStatus} | Payment Method: {order.paymentMethod}");
+                $"OrderId : {order.OrderId} | Price: {order.Price} | Product name: {order.ProductName} |" +
+                $" Client type: {order.ClientType}  | Address: {order.Address} | Status: {order.OrderStatus} | Payment Method: {order.PaymentMethod}");
     }
 }

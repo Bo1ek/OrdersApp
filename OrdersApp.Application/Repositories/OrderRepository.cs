@@ -15,9 +15,8 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
     
-    public async Task CreateOrderAsync()
+    public async Task CreateOrderAsync(Order entity)
     {
-        var entity = CreateOrderHelper.CreateOrder();
         await _context.Orders.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
@@ -26,7 +25,7 @@ public class OrderRepository : IOrderRepository
     {
         if (!await ExistsAsync(orderId)) 
             throw new OrderNotFoundException(orderId);
-        return await _context.Orders.FirstOrDefaultAsync(o => o.orderId == orderId) ?? throw new InvalidOperationException();
+        return await _context.Orders.FirstOrDefaultAsync(o => o.OrderId == orderId) ?? throw new InvalidOperationException();
     }
 
     public async Task<List<Order>> GetOrdersAsync()
@@ -53,7 +52,7 @@ public class OrderRepository : IOrderRepository
 
     public async Task<bool> ExistsAsync(int orderId)
     {
-        return await _context.Orders.AnyAsync(o => o.orderId == orderId);
+        return await _context.Orders.AnyAsync(o => o.OrderId == orderId);
     }
 
     public async Task SendOrderToTheWarehouseAsync(int orderId)
@@ -61,15 +60,15 @@ public class OrderRepository : IOrderRepository
         var orderToTransfer = await _context.Orders.FindAsync(orderId);
         if (orderToTransfer == null)
             throw new OrderNotFoundException(orderId);
-        if (orderToTransfer.orderStatus == OrderStatuses.InWarehouse)
+        if (orderToTransfer.OrderStatus == OrderStatuses.InWarehouse)
             Console.WriteLine("Order status is already in the warehouse.");
-        if (orderToTransfer.price <= 2500 && orderToTransfer.paymentMethod == PaymentMethods.Cash)
+        if (orderToTransfer.Price <= 2500 && orderToTransfer.PaymentMethod == PaymentMethods.Cash)
         {
-            orderToTransfer.orderStatus = OrderStatuses.ReturnedToClient;
+            orderToTransfer.OrderStatus = OrderStatuses.ReturnedToClient;
             Console.WriteLine("Order status cannot be sent to the warehouse due to its low price and payment method. " +
                               "Please insert price higher than 2500 or change payment method to card.");
         }
-        orderToTransfer.orderStatus = OrderStatuses.InWarehouse;
+        orderToTransfer.OrderStatus = OrderStatuses.InWarehouse;
     }
     public async Task ShipOrderAsync (int orderId)
     {
@@ -77,9 +76,9 @@ public class OrderRepository : IOrderRepository
         var orderToTransfer = await _context.Orders.FindAsync(orderId);
         if (orderToTransfer == null)
             throw new OrderNotFoundException(orderId);
-        if (orderToTransfer.orderStatus == OrderStatuses.Shipped)
+        if (orderToTransfer.OrderStatus == OrderStatuses.Shipped)
             Console.WriteLine("Order is already shipped.");
-        orderToTransfer.orderStatus = OrderStatuses.Shipped;
+        orderToTransfer.OrderStatus = OrderStatuses.Shipped;
         watch.Stop();
         if (watch.ElapsedMilliseconds >= 5000)
             throw new ShipOrderMethodLongerThan5Seconds(orderId);

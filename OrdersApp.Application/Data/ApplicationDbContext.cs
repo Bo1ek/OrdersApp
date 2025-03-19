@@ -14,7 +14,7 @@ public sealed class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Order>().HasKey(o => o.orderId);
+        modelBuilder.Entity<Order>().HasKey(o => o.OrderId);
     }
     public DbSet<Order> Orders { get; set; }
 }

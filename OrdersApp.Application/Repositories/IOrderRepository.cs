@@ -3,7 +3,7 @@
 namespace OrdersApp.Application.Repositories;
 public interface IOrderRepository
 {
-    Task CreateOrderAsync();
+    Task CreateOrderAsync(Order entity);
     Task<Order> GetOrderByIdAsync(int orderId);
     Task<List<Order>> GetOrdersAsync();
     Task UpdateOrderAsync(int orderId);
