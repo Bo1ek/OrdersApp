@@ -14,14 +14,18 @@ services.AddScoped<IOrderRepository, OrderRepository>();
 services.AddScoped<IOrderService, OrderService>();
 services.AddRepositories();
 services.BuildServiceProvider();
+
 await using var serviceProvider = services.BuildServiceProvider();
+
 var orderRepository = serviceProvider.GetRequiredService<IOrderRepository>();
 var orderService = serviceProvider.GetRequiredService<IOrderService>();
+
 Console.WriteLine("----------------------------");
 Console.WriteLine("-Welcome to the orders app!-");
+Console.WriteLine("----------------------------");
+
 while (true)
 {
-    Console.WriteLine("----------------------------");
     Console.WriteLine("1.Create order");
     Console.WriteLine("2.Send order to the warehouse");
     Console.WriteLine("3.Ship orders");

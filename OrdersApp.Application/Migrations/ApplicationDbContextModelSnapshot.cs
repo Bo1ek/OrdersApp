@@ -23,33 +23,35 @@ namespace OrdersApp.Application.Migrations
 
             modelBuilder.Entity("OrdersApp.Application.Models.Order", b =>
                 {
-                    b.Property<int>("orderId")
+                    b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("orderId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
-                    b.Property<string>("adress")
+                    b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("clientType")
+                    b.Property<int>("ClientType")
                         .HasColumnType("int");
 
-                    b.Property<int>("orderStatus")
+                    b.Property<int>("OrderStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("paymentMethod")
+                    b.Property<int>("PaymentMethod")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("productName")
+                    b.Property<string>("ProductName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("orderId");
+                    b.HasKey("OrderId");
 
                     b.ToTable("Orders");
                 });

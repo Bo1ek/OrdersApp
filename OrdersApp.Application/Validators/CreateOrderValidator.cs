@@ -2,7 +2,6 @@
 using OrdersApp.Application.Models;
 
 namespace OrdersApp.Application.Validators;
-
 public class CreateOrderValidator : AbstractValidator<Order>
 {
     public CreateOrderValidator()
@@ -38,13 +37,13 @@ public class CreateOrderValidator : AbstractValidator<Order>
 
         RuleFor(o => o.Address)
             .NotNull()
-            .WithMessage("Adress cannot be null.")
+            .WithMessage("Address cannot be null.")
             .NotEmpty()
-            .WithMessage("Adress cannot be empty.")
+            .WithMessage("Address cannot be empty.")
             .MinimumLength(3)
-            .WithMessage("Adress must be at least 3 characters long.")
+            .WithMessage("Address must be at least 3 characters long.")
             .MaximumLength(100)
-            .WithMessage("Adress cannot be longer than 100 characters.");
+            .WithMessage("Address cannot be longer than 100 characters.");
 
     }
 }

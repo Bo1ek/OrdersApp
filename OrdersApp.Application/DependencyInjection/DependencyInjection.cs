@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OrdersApp.Application.Data;
-using System.IO;
 using OrdersApp.Application.Repositories;
 
 namespace OrdersApp.Application.DependencyInjection;

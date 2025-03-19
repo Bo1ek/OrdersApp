@@ -4,7 +4,7 @@ namespace OrdersApp.Application.Services;
 
 public interface IOrderService
 {
-    Task<Order> GetOrderByIdAsync();
+    Task<Order?> GetOrderByIdAsync();
     Task UpdateOrderAsync();
     Task DeleteOrderAsync();
     Task SendOrderToTheWarehouseAsync();

@@ -10,6 +10,7 @@ public static class CreateOrderHelper
     {
         Console.WriteLine("Enter orders price:");
         var price = Convert.ToDecimal(Console.ReadLine());
+        
         Console.WriteLine("Enter products name: ");
         var productName = Console.ReadLine();
 
@@ -24,11 +25,12 @@ public static class CreateOrderHelper
         var orderStatus = (OrderStatuses)Convert.ToInt32(Console.ReadLine());
         
         Console.WriteLine("Please select payment method: ");
-        Console.WriteLine($"Client types: \n 1. {PaymentMethods.Cash} \n 2. {PaymentMethods.Card} ");
+        Console.WriteLine($"Payment methods: \n 1. {PaymentMethods.Cash} \n 2. {PaymentMethods.Card} ");
         var paymentMethod = (PaymentMethods)Convert.ToInt32(Console.ReadLine());
 
         Console.WriteLine("Please enter adress:");
         var adress = Console.ReadLine();
+        
         var order = new Order()
         {
             Price = price,
@@ -41,20 +43,18 @@ public static class CreateOrderHelper
         
         var validator = new CreateOrderValidator();
         var result = validator.Validate(order);
+        
         if (result.IsValid)
         {
             Console.WriteLine("The Validation was successfull!");
             return order;
         }
-        else
+
+        Console.WriteLine("Validation error:");
+        foreach (var error in result.Errors)
         {
-            Console.WriteLine("Validation error:");
-            foreach (var error in result.Errors)
-            {
-                Console.WriteLine($"{error.PropertyName}: {error.ErrorMessage}");
-            }
-            throw new Exception("Data was not valid.");
+            Console.WriteLine($"{error.PropertyName}: {error.ErrorMessage}");
         }
-        
+        throw new Exception("Data was not valid.");
     }
 }

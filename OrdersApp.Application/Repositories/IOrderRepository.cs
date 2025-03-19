@@ -8,7 +8,6 @@ public interface IOrderRepository
     Task<List<Order>> GetOrdersAsync();
     Task UpdateOrderAsync(int orderId);
     Task DeleteOrderAsync(int orderId);
-    Task<bool> ExistsAsync(int orderId);
     Task SendOrderToTheWarehouseAsync(int orderId);
     Task ShipOrderAsync(int orderId);
 

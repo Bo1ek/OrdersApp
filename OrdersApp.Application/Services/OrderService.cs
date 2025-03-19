@@ -2,28 +2,22 @@ using OrdersApp.Application.Enums;
 using OrdersApp.Application.Exceptions;
 using OrdersApp.Application.Models;
 using OrdersApp.Application.Repositories;
+using static System.Enum;
 
 namespace OrdersApp.Application.Services;
 
-public class OrderService : IOrderService
+public class OrderService(IOrderRepository orderRepository) : IOrderService
 {
-    private readonly IOrderRepository _orderRepository;
-
-    public OrderService(IOrderRepository orderRepository)
-    {
-        _orderRepository = orderRepository;
-    }
-
-    public async Task<Order> GetOrderByIdAsync()
+    public async Task<Order?> GetOrderByIdAsync()
     {
         Console.WriteLine("Please enter the order Id you want to get.");
         var orderId = int.Parse(Console.ReadLine());
         try
         {
-            var order =  await _orderRepository.GetOrderByIdAsync(orderId);
+            var order = await orderRepository.GetOrderByIdAsync(orderId);
             Console.WriteLine(
-            $"OrderId : {order.OrderId} | Price: {order.Price} | Product name: {order.ProductName} |" +
-            $" Client type: {order.ClientType}  | Address: {order.Address} | Status: {order.OrderStatus} | Payment Method: {order.PaymentMethod}");
+                $"OrderId : {order.OrderId} | Price: {order.Price} | Product name: {order.ProductName} |" +
+                $" Client type: {order.ClientType}  | Address: {order.Address} | Status: {order.OrderStatus} | Payment Method: {order.PaymentMethod}");
         }
         catch (OrderNotFoundException)
         {
@@ -33,6 +27,10 @@ public class OrderService : IOrderService
         {
             Console.WriteLine("Invalid order Id. Pass proper order Id.");
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
 
         return null;
     }
@@ -41,7 +39,8 @@ public class OrderService : IOrderService
     {
         Console.WriteLine("Please enter the order Id you want to update.");
         var orderId = int.Parse(Console.ReadLine());
-        var order =  await _orderRepository.GetOrderByIdAsync(orderId);
+        
+        var order =  await orderRepository.GetOrderByIdAsync(orderId);
         Console.WriteLine("Enter which property do u want to update?");
         Console.WriteLine($"1.Price -- Current price - {order.Price}");
         Console.WriteLine($"2.Product name -- Current product name -- {order.ProductName} ");
@@ -67,24 +66,24 @@ public class OrderService : IOrderService
                     break;
                 case "3" :
                     Console.WriteLine("Enter new client type: ");
-                    Enum.TryParse(Console.ReadLine(), out ClientTypes newClientType);
-                    if (Enum.IsDefined(typeof(ClientTypes), newClientType)) 
+                    TryParse(Console.ReadLine(), out ClientTypes newClientType);
+                    if (IsDefined(typeof(ClientTypes), newClientType)) 
                         order.ClientType = newClientType;
                     else
                         Console.WriteLine("Invalid client type. Pass proper client type.");
                     break;
                 case "4" :
                     Console.WriteLine("Enter new order status: ");
-                    Enum.TryParse(Console.ReadLine(), out OrderStatuses newOrderStatus);
-                    if (Enum.IsDefined(typeof(OrderStatuses), newOrderStatus))
+                    TryParse(Console.ReadLine(), out OrderStatuses newOrderStatus);
+                    if (IsDefined(typeof(OrderStatuses), newOrderStatus))
                         order.OrderStatus = newOrderStatus;
                     else
                         Console.WriteLine("Invalid order status. Pass proper order status.");
                     break;
                 case "5" :
                     Console.WriteLine("Enter new payment method: ");
-                    Enum.TryParse(Console.ReadLine(), out PaymentMethods newPaymentMethod);
-                    if (Enum.IsDefined(typeof(PaymentMethods), newPaymentMethod))
+                    TryParse(Console.ReadLine(), out PaymentMethods newPaymentMethod);
+                    if (IsDefined(typeof(PaymentMethods), newPaymentMethod))
                         order.PaymentMethod = newPaymentMethod;
                     else 
                         Console.WriteLine("Invalid payment method. Pass proper payment method.");
@@ -98,7 +97,7 @@ public class OrderService : IOrderService
                     Console.WriteLine("Invalid choice.");
                     break;
             }
-            await _orderRepository.UpdateOrderAsync(orderId);
+            await orderRepository.UpdateOrderAsync(orderId);
         }
         catch (OrderNotFoundException)
         {
@@ -112,12 +111,16 @@ public class OrderService : IOrderService
         var orderId = int.Parse(Console.ReadLine());
         try
         {
-            await _orderRepository.DeleteOrderAsync(orderId);
+            await orderRepository.DeleteOrderAsync(orderId);
             Console.WriteLine($"Order with order id: {orderId} deleted.");
         }
         catch (OrderNotFoundException)
         {
             Console.WriteLine("Order was not found. Pass proper order Id.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 
@@ -127,11 +130,15 @@ public class OrderService : IOrderService
         var orderId = int.Parse(Console.ReadLine());
         try
         {
-            await _orderRepository.SendOrderToTheWarehouseAsync(orderId);
+            await orderRepository.SendOrderToTheWarehouseAsync(orderId);
         }
         catch (OrderNotFoundException)
         {
             Console.WriteLine("Order was not found. Pass proper order Id.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 
@@ -141,7 +148,7 @@ public class OrderService : IOrderService
         var orderId = int.Parse(Console.ReadLine());
         try
         {
-            await _orderRepository.ShipOrderAsync(orderId);
+            await orderRepository.ShipOrderAsync(orderId);
         }
         catch (OrderNotFoundException)
         {
@@ -151,11 +158,15 @@ public class OrderService : IOrderService
         {
             Console.WriteLine("ShipOrder Method was executed for longer than 5 seconds. There was an error with executing this method.");
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     public async Task ShowOrdersAsync()
     {
-        var orders = await _orderRepository.GetOrdersAsync();
+        var orders = await orderRepository.GetOrdersAsync();
         foreach (var order in orders)
             Console.WriteLine(
                 $"OrderId : {order.OrderId} | Price: {order.Price} | Product name: {order.ProductName} |" +
